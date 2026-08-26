@@ -1,0 +1,6 @@
+git:latest
+workflow-aggregator:latest
+docker-workflow:latest
+htmlpublisher:latest
+credentials-binding:latest
+timestamper:latest
