@@ -20,6 +20,16 @@ pipeline {
             }
         }
 
+        stage('Provision environment') {
+            steps {
+                script {
+                    testImage.inside {
+                        sh 'bash scripts/setup.sh'
+                    }
+                }
+            }
+        }
+
         stage('Run tests') {
             steps {
                 script {
