@@ -6,5 +6,6 @@ COPY test-scripts/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY test-scripts/ .
+RUN chmod -R a+rwX /suite
 
 CMD ["python", "-m", "pytest", "--html=report.html", "--self-contained-html", "-v"]
