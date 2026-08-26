@@ -58,6 +58,14 @@ pipeline {
                 archiveArtifacts artifacts: "test-scripts/report.html,test-scripts/report-v${env.SCRIPT_VERSION}.html,test-scripts/results/test_results.db", allowEmptyArchive: false
             }
         }
+
+        stage('Change control gate') {
+            steps {
+                withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
+                    sh 'bash scripts/check_change_control.sh'
+                }
+            }
+        }
     }
 
     post {

@@ -1,5 +1,12 @@
 # Changelog
 
+## test-suite-v0.1.2
+
+- Add `test_delete_missing_device_returns_404`, covering a previously
+  untested edge case (deleting a nonexistent device). Demonstrates a
+  properly versioned, PR-reviewed change for the Jenky change-control gate
+  (Phase 4).
+
 ## test-suite-v0.1.1
 
 - Bumped to verify the Jenkins pipeline's version stamping (Phase 3 of the
