@@ -60,3 +60,9 @@ def test_list_devices_returns_created_device(api_base_url):
     assert response.status_code == 200
     names = [device["name"] for device in response.json()]
     assert "sw-core-05" in names
+
+
+@pytest.mark.functional
+def test_delete_missing_device_returns_404(api_base_url):
+    response = requests.delete(f"{api_base_url}/devices/999999")
+    assert response.status_code == 404
