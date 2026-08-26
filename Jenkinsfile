@@ -9,6 +9,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    env.SCRIPT_VERSION = readFile('test-scripts/VERSION.txt').trim()
+                    currentBuild.displayName = "#${env.BUILD_NUMBER} (test-scripts v${env.SCRIPT_VERSION})"
+                }
             }
         }
 
@@ -42,6 +46,7 @@ pipeline {
 
         stage('Publish') {
             steps {
+                sh "cp test-scripts/report.html test-scripts/report-v${env.SCRIPT_VERSION}.html"
                 publishHTML(target: [
                     reportDir: 'test-scripts',
                     reportFiles: 'report.html',
@@ -50,7 +55,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     allowMissing: false
                 ])
-                archiveArtifacts artifacts: 'test-scripts/report.html,test-scripts/results/test_results.db', allowEmptyArchive: false
+                archiveArtifacts artifacts: "test-scripts/report.html,test-scripts/report-v${env.SCRIPT_VERSION}.html,test-scripts/results/test_results.db", allowEmptyArchive: false
             }
         }
     }
