@@ -1,5 +1,10 @@
 # Changelog
 
+## test-suite-v0.1.1
+
+- Bumped to verify the Jenkins pipeline's version stamping (Phase 3 of the
+  Jenky wrapper): no test-script behavior changed.
+
 ## test-suite-v0.1.0
 
 - REST API target (`app/`) with 3 seeded bugs (pagination off-by-one,
