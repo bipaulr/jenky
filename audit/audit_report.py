@@ -21,7 +21,8 @@ def main():
     rows = conn.execute(
         """
         SELECT build_number, script_version, substr(git_commit_sha, 1, 8),
-               triggered_by, timestamp, test_outcome, gate_outcome, gate_reason
+               triggered_by, timestamp, test_outcome, gate_outcome, gate_reason,
+               smoke_outcome, rollback_outcome
         FROM audit_log
         ORDER BY build_number
         """
@@ -33,7 +34,8 @@ def main():
         return
 
     print_table(
-        ["build", "version", "commit", "triggered_by", "timestamp", "tests", "gate", "gate_reason"],
+        ["build", "version", "commit", "triggered_by", "timestamp", "tests", "gate",
+         "gate_reason", "smoke", "rollback"],
         rows,
     )
 
