@@ -66,3 +66,12 @@ def test_list_devices_returns_created_device(api_base_url):
 def test_delete_missing_device_returns_404(api_base_url):
     response = requests.delete(f"{api_base_url}/devices/999999")
     assert response.status_code == 404
+
+
+@pytest.mark.functional
+def test_update_missing_device_returns_404(api_base_url):
+    response = requests.put(
+        f"{api_base_url}/devices/999999",
+        json={"name": "does-not-exist"},
+    )
+    assert response.status_code == 404
