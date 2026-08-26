@@ -6,6 +6,8 @@ DB_PATH="test-scripts/results/test_results.db"
 CURRENT_BUILD="${BUILD_NUMBER:?BUILD_NUMBER not set}"
 CURRENT_SHA="${GIT_COMMIT:?GIT_COMMIT not set}"
 TOKEN="${GITHUB_TOKEN_WRITE:?GITHUB_TOKEN_WRITE not set}"
+TOKEN="${TOKEN//$'\n'/}"
+TOKEN="${TOKEN//$'\r'/}"
 
 echo "== Rollback: looking for last known-good version before build #${CURRENT_BUILD} =="
 
@@ -41,7 +43,7 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "Rollback test-scripts to v${GOOD_VERSION} (build #${CURRENT_BUILD} failed post-promotion smoke check)"
-git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" "${BRANCH}:${BRANCH}"
+git -c http.extraHeader="Authorization: Bearer ${TOKEN}" push "https://github.com/${REPO}.git" "${BRANCH}:${BRANCH}"
 
 PR_PAYLOAD=$(jq -n \
     --arg title "Rollback test-scripts to v${GOOD_VERSION}" \
