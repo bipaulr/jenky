@@ -1,5 +1,14 @@
 # Changelog
 
+## test-suite-v0.1.3
+
+- Demo for Phase 6 (rollback): adds the SIMULATE_SMOKE_FAILURE marker file,
+  a deliberate, documented trigger (see scripts/smoke_check.sh) for the
+  post-promotion smoke check to fail on purpose, so the automatic rollback
+  path can be exercised for real. Not a real defect, and not something the
+  full pytest suite catches - by design, that's the whole reason the
+  marker exists.
+
 ## test-suite-v0.1.2
 
 - Add `test_delete_missing_device_returns_404`, covering a previously
