@@ -90,6 +90,44 @@ pipeline {
                 }
             }
         }
+
+        stage('Post-promotion smoke check') {
+            steps {
+                script {
+                    if (env.GATE_OUTCOME != 'promoted') {
+                        env.SMOKE_OUTCOME = 'skipped'
+                        echo "Skipping post-promotion smoke check: gate outcome was ${env.GATE_OUTCOME}"
+                    } else {
+                        def exitCode
+                        testImage.inside {
+                            exitCode = sh(script: 'bash scripts/smoke_check.sh', returnStatus: true)
+                        }
+                        if (exitCode == 0) {
+                            env.SMOKE_OUTCOME = 'passed'
+                        } else {
+                            env.SMOKE_OUTCOME = 'failed'
+                            currentBuild.result = 'FAILURE'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Rollback') {
+            when {
+                expression { env.SMOKE_OUTCOME == 'failed' }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github-pat-write', variable: 'GITHUB_TOKEN_WRITE')]) {
+                    script {
+                        def exitCode = sh(script: 'bash scripts/rollback.sh > rollback_output.txt 2>&1', returnStatus: true)
+                        def output = readFile('rollback_output.txt').trim()
+                        echo output
+                        env.ROLLBACK_OUTCOME = (exitCode == 0) ? 'rolled_back' : 'rollback_failed'
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -99,6 +137,8 @@ pipeline {
                     env.TEST_OUTCOME = env.TEST_OUTCOME ?: 'unknown'
                     env.GATE_OUTCOME = env.GATE_OUTCOME ?: 'not_evaluated'
                     env.GATE_REASON = env.GATE_REASON ?: ''
+                    env.SMOKE_OUTCOME = env.SMOKE_OUTCOME ?: 'not_evaluated'
+                    env.ROLLBACK_OUTCOME = env.ROLLBACK_OUTCOME ?: 'not_evaluated'
                     testImage.inside {
                         sh 'python3 audit/audit_log.py'
                     }
