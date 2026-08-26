@@ -1,0 +1,113 @@
+Started by user admin
+Obtained Jenkinsfile from git C:\Users\hp\Desktop\nettester
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository C:\Users\hp\Desktop\nettester
+ > git.exe init C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline # timeout=10
+Fetching upstream changes from C:\Users\hp\Desktop\nettester
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.50.0.windows.2'
+ > git.exe fetch --tags --force --progress -- C:\Users\hp\Desktop\nettester +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe config remote.origin.url C:\Users\hp\Desktop\nettester # timeout=10
+ > git.exe config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git.exe rev-parse "refs/remotes/origin/master^{commit}" # timeout=10
+Checking out Revision df4675680932f569bdf9cfef7deb5a6b0fbad88b (refs/remotes/origin/master)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f df4675680932f569bdf9cfef7deb5a6b0fbad88b # timeout=10
+Commit message: "Block 4: add Jenkinsfile for local CI pipeline"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git.exe rev-parse --resolve-git-dir C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline\.git # timeout=10
+Fetching changes from the remote Git repository
+ > git.exe config remote.origin.url C:\Users\hp\Desktop\nettester # timeout=10
+Fetching upstream changes from C:\Users\hp\Desktop\nettester
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.50.0.windows.2'
+ > git.exe fetch --tags --force --progress -- C:\Users\hp\Desktop\nettester +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe rev-parse "refs/remotes/origin/master^{commit}" # timeout=10
+Checking out Revision df4675680932f569bdf9cfef7deb5a6b0fbad88b (refs/remotes/origin/master)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f df4675680932f569bdf9cfef7deb5a6b0fbad88b # timeout=10
+Commit message: "Block 4: add Jenkinsfile for local CI pipeline"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Setup)
+[Pipeline] bat
+
+C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline>python -m venv .venv 
+[Pipeline] bat
+
+C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline>.venv\Scripts\python.exe -m pip install --upgrade pip -q 
+[Pipeline] bat
+
+C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline>.venv\Scripts\python.exe -m pip install -r requirements.txt -q 
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] bat
+
+C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline>.venv\Scripts\python.exe -m pytest --html=report.html --self-contained-html -v 
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.3', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'html': '4.2.0', 'metadata': '3.1.1'}, 'CI': 'true', 'BUILD_NUMBER': '4', 'BUILD_ID': '4', 'NODE_NAME': 'built-in', 'JOB_NAME': 'nettest-pipeline', 'BUILD_TAG': 'jenkins-nettest-pipeline-4', 'EXECUTOR_NUMBER': '1', 'JAVA_HOME': 'C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.8-hotspot\\', 'WORKSPACE': 'C:\\Users\\hp\\Desktop\\jenkins-local\\jenkins_home\\workspace\\nettest-pipeline', 'GIT_COMMIT': 'df4675680932f569bdf9cfef7deb5a6b0fbad88b', 'GIT_URL': 'C:\\Users\\hp\\Desktop\\nettester', 'GIT_BRANCH': 'origin/master'}
+rootdir: C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline
+configfile: pytest.ini
+testpaths: tests
+plugins: html-4.2.0, metadata-3.1.1
+collecting ... collected 13 items
+
+tests/test_api_functional.py::test_create_device_returns_201 PASSED      [  7%]
+tests/test_api_functional.py::test_get_device_returns_created_device PASSED [ 15%]
+tests/test_api_functional.py::test_update_device_changes_fields PASSED   [ 23%]
+tests/test_api_functional.py::test_delete_device_returns_204 PASSED      [ 30%]
+tests/test_api_functional.py::test_list_devices_returns_created_device PASSED [ 38%]
+tests/test_api_regression.py::test_pagination_does_not_drop_last_item_on_page PASSED [ 46%]
+tests/test_api_regression.py::test_get_missing_device_returns_404 PASSED [ 53%]
+tests/test_api_regression.py::test_create_device_requires_ip_address PASSED [ 61%]
+tests/test_scpi_instrument.py::test_idn_returns_identification_string PASSED [ 69%]
+tests/test_scpi_instrument.py::test_reset_leaves_instrument_responsive PASSED [ 76%]
+tests/test_scpi_instrument.py::test_syst_err_reports_no_error_initially PASSED [ 84%]
+tests/test_scpi_instrument.py::test_measure_voltage_returns_volts_not_millivolts PASSED [ 92%]
+tests/test_scpi_instrument.py::test_unknown_command_is_logged_to_error_queue PASSED [100%]
+
+- Generated html report: file:///C:/Users/hp/Desktop/jenkins-local/jenkins_home/workspace/nettest-pipeline/report.html -
+============================= 13 passed in 7.25s ==============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish)
+[Pipeline] bat
+
+C:\Users\hp\Desktop\jenkins-local\jenkins_home\workspace\nettest-pipeline>.venv\Scripts\python.exe -m reporting.summary  1>summary.txt 
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
